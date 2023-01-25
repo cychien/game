@@ -1,7 +1,7 @@
 import words from "~/constants/words";
 import * as React from "react";
 import shuffle from "lodash/shuffle";
-import cx from 'classnames'
+import cx from "classnames";
 
 function getFourRandomNumbers(max) {
   let numbers = Array.from({ length: max }, (_, i) => i);
@@ -27,26 +27,33 @@ export default function Index() {
   const [order, setOrder] = React.useState([]);
   const [orderAppears, setOrderAppears] = React.useState(false);
 
-  
   React.useEffect(() => {
     setRandomNumbers(getFourRandomNumbers(words.length));
   }, []);
-  
+
   React.useEffect(() => {
     if (orderAppears) {
       setTimeout(() => {
-        setOrderAppears(false)
-      }, 1000)
+        setOrderAppears(false);
+      }, 1000);
     }
-  }, [orderAppears])
+  }, [orderAppears]);
 
   return (
     <div className="p-8 grid grid-cols-3 h-full gap-6">
       <div className="grid grid-cols-2 grid-rows-2 h-full col-span-2 gap-4">
-        <CodeCard title="CODE 1" isHideMode={isHideMode}>{words[randomNumbers[0]]}</CodeCard>
-        <CodeCard title="CODE 2" isHideMode={isHideMode}>{words[randomNumbers[1]]}</CodeCard>
-        <CodeCard title="CODE 3" isHideMode={isHideMode}>{words[randomNumbers[2]]}</CodeCard>
-        <CodeCard title="CODE 4" isHideMode={isHideMode}>{words[randomNumbers[3]]}</CodeCard>
+        <CodeCard title="CODE 1" isHideMode={isHideMode}>
+          {words[randomNumbers[0]]}
+        </CodeCard>
+        <CodeCard title="CODE 2" isHideMode={isHideMode}>
+          {words[randomNumbers[1]]}
+        </CodeCard>
+        <CodeCard title="CODE 3" isHideMode={isHideMode}>
+          {words[randomNumbers[2]]}
+        </CodeCard>
+        <CodeCard title="CODE 4" isHideMode={isHideMode}>
+          {words[randomNumbers[3]]}
+        </CodeCard>
       </div>
       <div className="grid grid-cols-2 grid-rows-2 h-full gap-4">
         <Textarea title="對手 CODE 1 線索" value={clue1} onChange={setClue1} />
@@ -61,27 +68,29 @@ export default function Index() {
           </div>
         )}
 
-        {/* -translate-x-16 hover:translate-x-0 transition */}
+        <button
+          className="bg-teal-500 text-white rounded-full py-3 px-4 shadow-md font-bold transition opacity-20 hover:opacity-100 block"
+          onClick={() => {
+            setRandomNumbers(getFourRandomNumbers(words.length));
+            setClue1("");
+            setClue2("");
+            setClue3("");
+            setClue4("");
+          }}
+        >
+          新局
+        </button>
         <div className="flex space-x-2">
           <button
-            className={cx("rounded-full py-3 px-4 shadow-md font-bold", {"bg-gray-600 text-white": isHideMode, "text-gray-600": !isHideMode})}
+            className={cx("rounded-full py-3 px-4 shadow-md font-bold", {
+              "bg-gray-600 text-white": isHideMode,
+              "text-gray-600 bg-white": !isHideMode,
+            })}
             onClick={() => {
-              setIsHideMode(prev => !prev)
+              setIsHideMode((prev) => !prev);
             }}
           >
-            {isHideMode ? '屏蔽模式' : '一般模式'}
-          </button>
-          <button
-            className="bg-teal-500 text-white rounded-full py-3 px-4 shadow-md font-bold transition opacity-20 hover:opacity-100"
-            onClick={() => {
-              setRandomNumbers(getFourRandomNumbers(words.length));
-              setClue1("");
-              setClue2("");
-              setClue3("");
-              setClue4("");
-            }}
-          >
-            新局
+            {isHideMode ? "屏蔽模式" : "一般模式"}
           </button>
           <button
             className="bg-teal-500 text-white rounded-full py-3 px-4 shadow-md font-bold transition hover:bg-teal-600"
@@ -102,8 +111,15 @@ function CodeCard({ children, title, isHideMode }) {
   return (
     <div className="flex flex-col space-y-2">
       <div className="text-teal-600 font-medium">{title}</div>
-      <div className={cx("flex items-center justify-center text-3xl shadow-md rounded-lg flex-1 hover:bg-teal-50 cursor-pointer font-bold text-gray-700 bg-white transition", {"group": isHideMode})}>
-        <span className={cx({'blur-lg group-hover:blur-none': isHideMode})}>{children}</span>
+      <div
+        className={cx(
+          "flex items-center justify-center text-3xl shadow-md rounded-lg flex-1 hover:bg-teal-50 cursor-pointer font-bold text-gray-700 bg-white transition",
+          { group: isHideMode }
+        )}
+      >
+        <span className={cx({ "blur-lg group-hover:blur-none": isHideMode })}>
+          {children}
+        </span>
       </div>
     </div>
   );
